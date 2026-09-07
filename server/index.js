@@ -20,7 +20,20 @@ app.post('/webhook', async (req, res) => {
       body: JSON.stringify({model: process.env.AI_MODEL || 'gpt-4o-mini', messages: [{role: 'system', content: 'You are a warm, concise dental clinic follow-up assistant.'}, {role: 'user', content: message.text?.body || ''}]})
     });
     const data = await aiResponse.json();
-    console.log('AI reply prepared for', message.from, data.choices?.[0]?.message?.content || data.error);
+    const replyText = data.choices?.[0]?.message?.content || "Sorry, I couldn't process that.";
+
+    await fetch(`https://graph.facebook.com/v20.0/${process.env.PHONE_NUMBER_ID}/messages`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        messaging_product: 'whatsapp',
+        to: message.from,
+        text: { body: replyText }
+      })
+                });             
   } catch (error) { console.error('AI forwarding failed:', error.message); }
   return res.sendStatus(200);
 });
