@@ -38,4 +38,4 @@ app.post('/webhook', async (req, res) => {
   return res.sendStatus(200);
 });
 
-app.listen(process.env.PORT || 3001, () => console.log('Webhook server listening on port 1000'));
+app.listen(process.env.PORT || 10000, () => console.log('Webhook server listening on port 10000'));
