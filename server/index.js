@@ -86,10 +86,9 @@ app.get('/api/ads/accounts', async (req, res) => {
 app.get('/api/ads/campaigns', async (req, res) => {
     try {
         const token = process.env.MARKETING_ACCESS_TOKEN;
-        const accountId = 'act_1116651927034675'; // Aapka Verified Ad Account ID
+        const accountId = 'act_1116651927034675';
         
-        // Fetch campaigns with name, status, daily_budget, insights
-        const response = await fetch(https://graph.facebook.com/v20.0/${accountId}/campaigns?fields=name,status,objective,daily_budget&access_token=${token});
+        const response = await fetch('https://graph.facebook.com/v20.0/' + accountId + '/campaigns?fields=name,status,objective,daily_budget&access_token=' + token);
         const data = await response.json();
         res.json(data);
     } catch (error) {
