@@ -37,7 +37,7 @@ app.post('/webhook', async (req, res) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': Bearer ${process.env.AI_API_KEY}
+                'Authorization': 'Bearer ' + (process.env.AI_API_KEY || '')
             },
             body: JSON.stringify({
                 model: process.env.AI_MODEL || 'gpt-4o-mini',
@@ -51,10 +51,10 @@ app.post('/webhook', async (req, res) => {
         const data = await aiResponse.json();
         const replyText = data.choices?.[0]?.message?.content || "Sorry, I couldn't process that.";
 
-        await fetch(https://graph.facebook.com/v20.0/${process.env.PHONE_NUMBER_ID}/messages, {
+        await fetch('https://graph.facebook.com/v20.0/' + process.env.PHONE_NUMBER_ID + '/messages', {
             method: 'POST',
             headers: {
-                'Authorization': Bearer ${process.env.WHATSAPP_TOKEN},
+                'Authorization': 'Bearer ' + process.env.WHATSAPP_TOKEN,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -73,7 +73,7 @@ app.post('/webhook', async (req, res) => {
 app.get('/api/ads/accounts', async (req, res) => {
     try {
         const token = process.env.MARKETING_ACCESS_TOKEN;
-        const response = await fetch(https://graph.facebook.com/v20.0/me/adaccounts?access_token=${token});
+        const response = await fetch('https://graph.facebook.com/v20.0/me/adaccounts?access_token=' + token);
         const data = await response.json();
         res.json(data);
     } catch (error) {
@@ -82,4 +82,4 @@ app.get('/api/ads/accounts', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, '0.0.0.0', () => console.log(Marketing & WhatsApp Server running on port ${PORT}));
+app.listen(PORT, '0.0.0.0', () => console.log('Marketing & WhatsApp Server running on port ' + PORT));
