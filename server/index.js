@@ -70,11 +70,26 @@ app.post('/webhook', async (req, res) => {
     }
 });
 
-// Marketing API Endpoint: Fetch Ad Accounts connected to App Token
+// Endpoint 1: Fetch Ad Accounts
 app.get('/api/ads/accounts', async (req, res) => {
     try {
         const token = process.env.MARKETING_ACCESS_TOKEN;
         const response = await fetch('https://graph.facebook.com/v20.0/me/adaccounts?access_token=' + token);
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Endpoint 2: Fetch Campaigns for Ad Account (act_1116651927034675)
+app.get('/api/ads/campaigns', async (req, res) => {
+    try {
+        const token = process.env.MARKETING_ACCESS_TOKEN;
+        const accountId = 'act_1116651927034675'; // Aapka Verified Ad Account ID
+        
+        // Fetch campaigns with name, status, daily_budget, insights
+        const response = await fetch(https://graph.facebook.com/v20.0/${accountId}/campaigns?fields=name,status,objective,daily_budget&access_token=${token});
         const data = await response.json();
         res.json(data);
     } catch (error) {
